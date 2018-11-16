@@ -23,7 +23,7 @@ void setup()
   size(1280, 480);
   kinect = new Kinect(this);
   kinect.initDepth();
-//   kinect.initVideo();
+  kinect.initVideo();
 
   background(0);
   frameRate(20);
@@ -32,7 +32,7 @@ void setup()
 void draw() 
 {
   // Update our particle system each frame
-//   image(kinect.getVideoImage(), 640, 0);
+  image(kinect.getVideoImage(), 640, 0);
   int[] depth = kinect.getRawDepth();
 
   for (int x = 0; x < kinect.width; x++) {
