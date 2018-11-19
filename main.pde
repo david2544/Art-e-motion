@@ -1,7 +1,6 @@
 import java.util.Iterator;
 import org.openkinect.processing.*;
 
-// Kinect Library object
 Kinect kinect;
 
 float minThresh = 600;
@@ -20,9 +19,12 @@ final int SPAWN_DELAY = 50; //ms
 
 int[] x1 = {320, 335, 350, 360, 372, 378, 380, 378, 372, 360, 350, 335, 320, 305, 290, 280, 272, 262, 260, 262, 268, 280, 290, 305};
 int[] y1 = {180, 182, 190, 200, 215, 228, 240, 252, 270, 280, 290, 298, 300, 298, 290, 280, 270, 256, 240, 228, 215, 200, 190, 182};
+int backgroundCounter = 10;
 
 boolean displayColour = true;
 int time = millis();
+boolean ready = true;
+boolean firstSequence = true;
 
 ParticleSystem system = new ParticleSystem();
 ColourGenerator colour = new ColourGenerator();
@@ -32,17 +34,27 @@ void setup()
   size(640, 480);
   kinect = new Kinect(this);
   kinect.initDepth();
+  kinect.enableMirror(true);
 //   kinect.initVideo();
 
   background(0);
-  frameRate(20);
+  frameRate(30);
 }
 
 void draw() 
 {
+  if(firstSequence == true) {
+    background(0);
+  }
+    
   system.update();
+  if(millis() > time + 2000) {
+    system.clearCount();
+    background(0);
+    ready = true;
+  }
   // Update our particle system each frame
-//   image(kinect.getVideoImage(), 640, 0);
+  //   image(kinect.getVideoImage(), 640, 0);
   int[] depth = kinect.getRawDepth();
   if(initialStart == true) {
     initialStart = false;
@@ -52,44 +64,35 @@ void draw()
     for (int y = 0; y < kinect.height; y++) {
       int offset = x + y * kinect.width;
       int d = depth[offset];
-      // print(d, " this:");
       if (d > minThresh && d < maxThresh) {
-        //print(d, "\n");
-         //print("Here");
-         //background(0);
-         if (millis() > time + SPAWN_DELAY) {
-           // print("yes");           
-           for(int i = 0; i < 24; i++) {
-             system.addParticle(new PVector(x1[i], y1[i]));
-             time = millis();
-            }
-         }
+        time = millis();
+        if(ready == true) {
+          ready = false;
+          for(int i = 0; i < 24; i++) {
+            system.addParticle(new PVector(random(x-50, x+50), random(y-50, y+50)));
+          }
+        }
+      } else {
+        if(millis() > time + 100) {
+          print("bla");
+          firstSequence = false;
+          ready = true;
+        }
       }
     }
   }
 }
 
-// void mousePressed()
-// {
-  
-//   print("Here");
-//   background(0);
-//   if (millis() > time + SPAWN_DELAY) {
-//     for(int i = 0; i < 24; i++) {
-//       system.addParticle(new PVector(x1[i], y1[i]));
-//       time = millis();
-//     }
-//   }
-// }
-
-void keyPressed() 
+void mousePressed()
 {
   
-  switch (key) {
-    case 'r':
-      background(0);
-      break;
-    default:  
-      displayColour = !displayColour;  
+  // print("Here");
+  background(0);
+  if (millis() > time + SPAWN_DELAY) {
+    for(int i = 0; i < 24; i++) {
+      background(0, 0.1);
+      system.addParticle(new PVector(x1[i], y1[i]));
+      time = millis();
+    }
   }
 }

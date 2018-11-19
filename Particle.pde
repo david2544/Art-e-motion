@@ -8,8 +8,6 @@ class Particle
   int size = START_SIZE;
   float angle;
   float lifespan;
-
-  //ColourGenerator colour = new ColourGenerator();
   
   Particle(PVector loc2) 
   {
@@ -39,23 +37,24 @@ class Particle
     // Appy result to current location
     loc.add(vel);
     
-    // Wrap around screen
-    // if (loc.x > width)
-    //   loc.x -= width;
-    //  if (loc.x < 0)
-    //    loc.x += width;
-    //  if(loc.y > height)
-    //    loc.y -= height;
-    //  if(loc.y < 0)
-    //    loc.y += height;
-    lifespan -= 2.0;
-    if(mousePressed != true) {
-        size -= SHRINK_RATE;
+    // Wrap around the screen
+    if (loc.x > width)
+      loc.x -= width;
+     if (loc.x < 0)
+       loc.x += width;
+     if(loc.y > height)
+       loc.y -= height;
+     if(loc.y < 0)
+       loc.y += height;
+    
+    // lifespan -= 2.0;
+    if(ready == true) {
+      size -= SHRINK_RATE;
     }
 
-    if(lifespan <= 0) {
-        background(0);
-    }
+    // if(lifespan <= 0) {
+    //     background(0);
+    // }
     
   }
   

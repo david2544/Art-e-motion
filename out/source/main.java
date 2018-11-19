@@ -5,6 +5,7 @@ import processing.opengl.*;
 
 import java.util.Iterator; 
 import org.openkinect.processing.*; 
+import java.util.*; 
 
 import java.util.HashMap; 
 import java.util.ArrayList; 
@@ -20,7 +21,6 @@ public class main extends PApplet {
 
 
 
-// Kinect Library object
 Kinect kinect;
 
 float minThresh = 600;
@@ -39,9 +39,12 @@ final int SPAWN_DELAY = 50; //ms
 
 int[] x1 = {320, 335, 350, 360, 372, 378, 380, 378, 372, 360, 350, 335, 320, 305, 290, 280, 272, 262, 260, 262, 268, 280, 290, 305};
 int[] y1 = {180, 182, 190, 200, 215, 228, 240, 252, 270, 280, 290, 298, 300, 298, 290, 280, 270, 256, 240, 228, 215, 200, 190, 182};
+int backgroundCounter = 10;
 
 boolean displayColour = true;
 int time = millis();
+boolean ready = true;
+boolean firstSequence = true;
 
 ParticleSystem system = new ParticleSystem();
 ColourGenerator colour = new ColourGenerator();
@@ -51,17 +54,27 @@ public void setup()
   
   kinect = new Kinect(this);
   kinect.initDepth();
+  kinect.enableMirror(true);
 //   kinect.initVideo();
 
   background(0);
-  frameRate(20);
+  frameRate(30);
 }
 
 public void draw() 
 {
+  if(firstSequence == true) {
+    background(0);
+  }
+    
   system.update();
+  if(millis() > time + 2000) {
+    system.clearCount();
+    background(0);
+    ready = true;
+  }
   // Update our particle system each frame
-//   image(kinect.getVideoImage(), 640, 0);
+  //   image(kinect.getVideoImage(), 640, 0);
   int[] depth = kinect.getRawDepth();
   if(initialStart == true) {
     initialStart = false;
@@ -71,46 +84,75 @@ public void draw()
     for (int y = 0; y < kinect.height; y++) {
       int offset = x + y * kinect.width;
       int d = depth[offset];
-      // print(d, " this:");
       if (d > minThresh && d < maxThresh) {
-        //print(d, "\n");
-         //print("Here");
-         //background(0);
-         if (millis() > time + SPAWN_DELAY) {
-           // print("yes");           
-           for(int i = 0; i < 24; i++) {
-             system.addParticle(new PVector(x1[i], y1[i]));
-             time = millis();
-            }
-         }
+        time = millis();
+        if(ready == true) {
+          ready = false;
+          for(int i = 0; i < 24; i++) {
+            system.addParticle(new PVector(random(x-50, x+50), random(y-50, y+50)));
+          }
+        }
+      } else {
+        if(millis() > time + 100) {
+          print("bla");
+          firstSequence = false;
+          ready = true;
+        }
       }
     }
   }
 }
 
-// void mousePressed()
-// {
-  
-//   print("Here");
-//   background(0);
-//   if (millis() > time + SPAWN_DELAY) {
-//     for(int i = 0; i < 24; i++) {
-//       system.addParticle(new PVector(x1[i], y1[i]));
-//       time = millis();
-//     }
-//   }
-// }
-
-public void keyPressed() 
+public void mousePressed()
 {
   
-  switch (key) {
-    case 'r':
-      background(0);
-      break;
-    default:  
-      displayColour = !displayColour;  
+  // print("Here");
+  background(0);
+  if (millis() > time + SPAWN_DELAY) {
+    for(int i = 0; i < 24; i++) {
+      background(0, 0.1f);
+      system.addParticle(new PVector(x1[i], y1[i]));
+      time = millis();
+    }
   }
+}
+class Attractor{
+	Particle2 particle;
+	float mass;
+	PVector location;
+	float g;
+	float strength;
+	float distance;
+
+	Attractor(PVector position){
+		location = position.get();
+		mass = 20; // later one try with depthvalue
+		g = 5;
+	}
+
+	public PVector attract(Particle2 particle){
+		PVector force = PVector.sub(location, particle.position);
+		distance = force.mag();
+		force.normalize();
+		//strength = (g * mass * particle.mass) * (distance * distance);
+		strength = g / distance * distance;
+		force.mult(strength);
+		ColourGenerator colour = new ColourGenerator();
+    colour.update();
+		return force;
+	}
+
+	public PVector repulse(Particle2 particle){
+		PVector force = PVector.sub(location, particle.position);
+		distance = force.mag();
+		force.normalize();
+		strength = -1 * g / distance* distance;//
+		//strength = (g * mass * particle.mass) * (distance * distance); 
+		force.mult(strength);
+    colour.update();
+		
+		return force;
+	}
 }
 class ColourGenerator
 {
@@ -156,8 +198,6 @@ class Particle
   int size = START_SIZE;
   float angle;
   float lifespan;
-
-  //ColourGenerator colour = new ColourGenerator();
   
   Particle(PVector loc2) 
   {
@@ -187,23 +227,24 @@ class Particle
     // Appy result to current location
     loc.add(vel);
     
-    // Wrap around screen
-    // if (loc.x > width)
-    //   loc.x -= width;
-    //  if (loc.x < 0)
-    //    loc.x += width;
-    //  if(loc.y > height)
-    //    loc.y -= height;
-    //  if(loc.y < 0)
-    //    loc.y += height;
-    lifespan -= 2.0f;
-    if(mousePressed != true) {
-        size -= SHRINK_RATE;
+    // Wrap around the screen
+    if (loc.x > width)
+      loc.x -= width;
+     if (loc.x < 0)
+       loc.x += width;
+     if(loc.y > height)
+       loc.y -= height;
+     if(loc.y < 0)
+       loc.y += height;
+    
+    // lifespan -= 2.0;
+    if(ready == true) {
+      size -= SHRINK_RATE;
     }
 
-    if(lifespan <= 0) {
-        background(0);
-    }
+    // if(lifespan <= 0) {
+    //     background(0);
+    // }
     
   }
   
@@ -229,23 +270,123 @@ class Particle
     }
   }
 }
+class Particle2{
+  PVector position;
+  PVector velocity;
+  PVector acceleration;
+  int index;
+  float mass;
+  PVector force;
+  int lifespan;  
+
+  Particle2(){
+    mass = random(10);
+    position = new PVector(random(0, width), random(0, height));
+    velocity = new PVector(0, 0);
+    acceleration = new PVector(random(-1,1), random(-1,1));
+    lifespan = 255;
+  }
+    
+  public void applyForce(PVector f){
+    PVector force = PVector.div(f, mass);
+    acceleration.add(force);
+  }
+
+  public PVector repulse(Particle2 part){
+    float g = 5;
+    force = PVector.sub(position, part.position);
+    float distance = force.mag();
+
+    force.normalize();
+    float strength = (g * mass * part.mass) / (distance * distance);
+    force.mult(strength);
+    return force;
+  }
+
+  public void display(){
+    fill(colour.R, colour.G, colour.B, lifespan);
+    ellipse(position.x, position.y, mass * 2, mass * 2);
+  }
+
+  public void move(){
+    //println("partPosition: " + position);
+    velocity.add(acceleration);
+    velocity.limit(3);
+    position.add(velocity);
+
+    acceleration.mult(0);
+    lifespan -= 0.005f;
+  }
+
+  public void checkEdges(){
+
+    if(position.x < 0){
+      position.x = 0.1f;
+      velocity.x *= -1;
+    }
+    if(position.x > width){
+      position.x = width - 1;
+      velocity.x *= -1;
+    }
+    if(position.y < 0){
+      position.y = 0.1f;
+      velocity.y *= -1;
+    }
+    if(position.y > height){
+      position.y = height - 1;
+      velocity.y *= -1;
+    }
+  }
+
+  public void setIndex(int in){
+    index = in;
+  }
+
+  public int getIndex(){
+    return index;
+  }
+
+  public boolean isDead(){
+    if(lifespan == 0){
+      return true;
+    }
+    return false;
+  }
+
+  // void changeColor(){
+  // //fillColor = color(random(255), random(255), random(255));
+  // fillColor = color(0,160, random(255));
+  // }
+
+
+  public void run(){
+    checkEdges();
+    move();
+    display();
+  }
+}
 class ParticleSystem
 {
   ArrayList<Particle> particles = new ArrayList<Particle>();
   int count = 0;
   
   ParticleSystem() { }
+
+  public void clearCount() {
+    count = 0;
+  }
     
   public void addParticle(PVector loc)
   {
-    count++;
+    // print(count, "\n");
     if (particles.size() + SPAWN_COUNT < MAX_PARTICLES && count <= 24) {
+        count++;
       // for (int i = 0; i < SPAWN_COUNT; i++) {
         particles.add(new Particle(loc));
       // }
     }
   }
-  
+
   public void update()
   {
     // Use an iterator to loop through active particles
@@ -258,13 +399,108 @@ class ParticleSystem
       // update position and lifespan
       p.update();
       // Remove particle if dead
+      // print(p.size);
       if (p.isDead()) {
         i.remove();
+        // print("decreasing count:", count, "/n");
         count--;
       } else {
         p.display();
       }
     }
+  }
+}
+
+
+
+class ParticleSystem2{
+  Particle2 particle;
+  ArrayList<Particle2> particleList = new ArrayList<Particle2>();
+  Iterator<Particle2> itr = particleList.iterator();
+  Attractor hand;
+  PVector position;
+  PVector force;
+	PVector handPosition;
+  float time = 0;
+
+  int index;
+  int particleNumber = 1000;
+  
+  ParticleSystem2(){
+  }
+
+  public void addParticle(PVector location){
+    position = location.get();
+    for(int i = 0 ; i < particleNumber; i++){
+      particle = new Particle2();
+      if(millis() > time + 10){
+        particleList.add(particle);
+        time = millis();
+      }
+      // particleList.add(index, particle);
+      // particle.setIndex(index);
+      // index = i;
+    }
+  }
+
+  // void addParticle(PVector location){
+  //   position = location.get();
+  //   if(particleList.size() < 500){
+  //     particleList.add(new Particle());
+  //   }
+  // }
+
+  public void showParticle(){
+    for(int i = particleList.size() -1; i >= 0; i--){
+      Particle2 part = particleList.get(i);
+      part.run();
+      if(part.isDead()){
+        particleList.remove(part);
+      }
+    }
+  }
+
+  public void repulseParticle(){
+    for(int i = 0; i < particleList.size(); i++){
+      for(int j = 0; j< particleList.size(); j++){
+        if(i != j){
+          Particle2 p1 = particleList.get(i);
+          Particle2 p2 = particleList.get(j);
+          float distance = dist(p1.position.x, p1.position.y, p2.position.x, p2.position.y);
+
+          if(distance < 10){
+            force = p1.repulse(p2);
+            p1.applyForce(force);
+          }
+        }
+      }
+    }
+  }
+
+	public void getAttracted(PVector location){
+    handPosition = location.get();
+		hand = new Attractor(handPosition);
+
+		for(Particle2 part : particleList){
+			force = hand.attract(part);
+			part.applyForce(force);
+		}
+	}
+
+	public void getRepulsed(PVector handpos){
+		handPosition = handpos.get();
+		hand = new Attractor(handPosition);
+
+		for(Particle2 part : particleList){
+			force = hand.repulse(part);
+			part.applyForce(force);
+		}
+
+	}
+
+  public void run(){
+    repulseParticle();
+    showParticle();
   }
 }
   public void settings() {  size(640, 480); }
