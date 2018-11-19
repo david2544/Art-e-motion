@@ -20,6 +20,7 @@ public class main extends PApplet {
 
 
 
+// import processing.sound.*;
 
 Kinect kinect;
 
@@ -42,12 +43,16 @@ int[] y1 = {180, 182, 190, 200, 215, 228, 240, 252, 270, 280, 290, 298, 300, 298
 int backgroundCounter = 10;
 
 boolean displayColour = true;
-int time = millis();
+int ellapsedTime = millis();
 boolean ready = true;
-boolean firstSequence = true;
+boolean startScreenDone = false;
 
 ParticleSystem system = new ParticleSystem();
 ColourGenerator colour = new ColourGenerator();
+ParticleSystem2 particleSystem = new ParticleSystem2();
+// Sound sound;
+Attractor hand;
+float time = 0;
 
 public void setup()
 {
@@ -55,52 +60,91 @@ public void setup()
   kinect = new Kinect(this);
   kinect.initDepth();
   kinect.enableMirror(true);
-//   kinect.initVideo();
-
   background(0);
+  particleSystem.addParticle(new PVector(random(width), random(height)));
   frameRate(30);
 }
 
 public void draw() 
 {
-  if(firstSequence == true) {
-    background(0);
-  }
-    
-  system.update();
-  if(millis() > time + 2000) {
-    system.clearCount();
-    background(0);
-    ready = true;
-  }
-  // Update our particle system each frame
-  //   image(kinect.getVideoImage(), 640, 0);
-  int[] depth = kinect.getRawDepth();
-  if(initialStart == true) {
-    initialStart = false;
-    delay(2000);
-  }
-  for (int x = 0; x < kinect.width; x++) {
-    for (int y = 0; y < kinect.height; y++) {
-      int offset = x + y * kinect.width;
-      int d = depth[offset];
-      if (d > minThresh && d < maxThresh) {
-        time = millis();
-        if(ready == true) {
-          ready = false;
-          for(int i = 0; i < 24; i++) {
-            system.addParticle(new PVector(random(x-50, x+50), random(y-50, y+50)));
+  if (startScreenDone == false) {
+
+    system.update();
+    if(millis() > ellapsedTime + 2000) {
+      system.clearCount();
+      background(0);
+      ready = true;
+    }
+    // Update our particle system each frame
+    //   image(kinect.getVideoImage(), 640, 0);
+    int[] depth = kinect.getRawDepth();
+    if(initialStart == true) {
+      initialStart = false;
+      delay(2000);
+    }
+    for (int x = 0; x < kinect.width; x++) {
+      for (int y = 0; y < kinect.height; y++) {
+        int offset = x + y * kinect.width;
+        int d = depth[offset];
+        if (d > minThresh && d < maxThresh) {
+          ellapsedTime = millis();
+          if(ready == true) {
+            ready = false;
+            for(int i = 0; i < 24; i++) {
+              system.addParticle(new PVector(random(x-50, x+50), random(y-50, y+50)));
+            }
           }
-        }
-      } else {
-        if(millis() > time + 100) {
-          print("bla");
-          firstSequence = false;
-          ready = true;
+        } else {
+          if(millis() > ellapsedTime + 100) {
+            ready = true;
+          }
         }
       }
     }
-  }
+  } else {
+    background(0);
+    particleSystem.addParticle(new PVector(random(width), random(height)));
+
+    image(kinect.getDepthImage(), 640, 0);
+
+    particleSystem.run();
+    float sumX = 0;
+    float sumY = 0;
+    float totalPixels = 0;
+    float avgX = 0;
+    float avgY = 0;
+
+    int[] depth = kinect.getRawDepth();
+
+    for(int x = 0; x < kinect.width; x++){
+		  for(int y = 0; y < kinect.height; y++){
+			
+			  int offset = x + y * kinect.width;
+        int depthValue = depth[offset];
+        int minTrash = 500;
+        int maxTrash = 740;
+
+        if(depthValue > minTrash && depthValue < maxTrash){
+          //img.pixels[offset] = color(255,0, 150);
+          sumX += x;
+          sumY += y;
+          totalPixels ++;
+        }
+  		}
+	  }
+    avgX = sumX / totalPixels;
+    avgY = sumY / totalPixels;
+
+  	//img.updatePixels();
+	
+	  PVector avgPosition = new PVector(avgX, avgY);
+
+    if(totalPixels > 4500){
+      particleSystem.getAttracted(avgPosition);
+    } else if (totalPixels > 0 && totalPixels < 4000){
+      particleSystem.getRepulsed(avgPosition);
+    }
+  } 
 }
 
 public void mousePressed()
@@ -108,11 +152,11 @@ public void mousePressed()
   
   // print("Here");
   background(0);
-  if (millis() > time + SPAWN_DELAY) {
+  if (millis() > ellapsedTime + SPAWN_DELAY) {
     for(int i = 0; i < 24; i++) {
       background(0, 0.1f);
       system.addParticle(new PVector(x1[i], y1[i]));
-      time = millis();
+      ellapsedTime = millis();
     }
   }
 }
@@ -237,14 +281,14 @@ class Particle
      if(loc.y < 0)
        loc.y += height;
     
-    // lifespan -= 2.0;
+    lifespan -= 2.0f;
     if(ready == true) {
       size -= SHRINK_RATE;
     }
 
-    // if(lifespan <= 0) {
-    //     background(0);
-    // }
+    if(lifespan <= 0) {
+      startScreenDone = true;
+    }
     
   }
   

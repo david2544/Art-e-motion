@@ -47,14 +47,14 @@ class Particle
      if(loc.y < 0)
        loc.y += height;
     
-    // lifespan -= 2.0;
+    lifespan -= 2.0;
     if(ready == true) {
       size -= SHRINK_RATE;
     }
 
-    // if(lifespan <= 0) {
-    //     background(0);
-    // }
+    if(lifespan <= 0) {
+      startScreenDone = true;
+    }
     
   }
   
