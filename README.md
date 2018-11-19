@@ -1,6 +1,7 @@
 # Art-e-motion
 Combining Processing animations and Kinect to create pretty art.
 
+<<<<<<< HEAD
 
 ## How to run it
 
@@ -17,3 +18,9 @@ Combining Processing animations and Kinect to create pretty art.
                 choose `Shell Command: Install 'code' command in PATH`, return to terminal and run the command again)
                 Or simply open the `main` folder manually in VSCode :D
 * open the `main.pde` file and `command + shift + b`
+=======
+How to run:
+* Install Processing 3
+* Clone the project and run main.pde in Processing.
+* Fail because you need a kinect, frame, spandex, beamer, ropes, chairs, accurate to the mm measurements and so on.
+>>>>>>> Create README.md
