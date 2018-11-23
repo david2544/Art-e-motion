@@ -43,7 +43,7 @@ class Particle2{
     position.add(velocity);
 
     acceleration.mult(0);
-    lifespan -= 0.005;
+    //lifespan -= 0.005;
   }
 
   void checkEdges(){

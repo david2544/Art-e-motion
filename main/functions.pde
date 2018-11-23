@@ -31,13 +31,15 @@ void secondScreen(int[] depth) {
 
   avgX = sumX / totalPixels;
   avgY = sumY / totalPixels;
+	avgZ = Math.round(sumZ / (totalPixels * 10));
+
   PVector avgPosition = new PVector(avgX, avgY);
 
-  if(totalPixels > 4500){
-    particleSystem.getAttracted(avgPosition);
-  } else if (totalPixels > 0 && totalPixels < 4000){
-    particleSystem.getRepulsed(avgPosition);
-  }
+	if(avgZ > 65 && avgZ <= 72){
+		particleSystem.getAttracted(avgPosition);
+	}else if(avgZ > 72 && avgZ < 75){
+		particleSystem.getRepulsed(avgPosition);
+	}
 }
 
 void pixelParser(int[] depth) {
@@ -52,6 +54,7 @@ void pixelParser(int[] depth) {
         } else {
           sumX += x;
           sumY += y;
+          sumZ += d;
           totalPixels ++;
         }
       } else {

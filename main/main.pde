@@ -32,6 +32,8 @@ float time = 0;
 float sumX = 0;
 float sumY = 0;
 float totalPixels = 0;
+float sumZ = 0;
+float avgZ = 0;
 
 void setup()
 {
@@ -52,4 +54,6 @@ void draw()
   } else {
     secondScreen(depth);
   } 
+  particleSystem.addParticle(new PVector(random(width), random(height)));
+  frameRate(30);
 }
