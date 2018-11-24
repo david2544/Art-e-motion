@@ -7,9 +7,11 @@ Combining Processing animations and Kinect to create pretty art.
 * Clone this project
 * run `cd Art-e-motion`
 * run `make`
-  * If you get 
+  * If you get the following error:
+  
     ```xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools), missing xcrun at: /Library/Developer/CommandLineTools/usr/bin/xcrun```
-  * run `xcode-select --install` and wait for it to finish then try to run `make` again.
+    
+  * then run `xcode-select --install` and wait for it to finish then try to run `make` again.
 * run `cd main`
 * run `code .` (If you get "command not found: code" , open VsCode, run `command + shift + p` search for code and 
                 choose `Shell Command: Install 'code' command in PATH, return to terminal and run again)
