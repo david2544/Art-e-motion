@@ -67,6 +67,7 @@ public void setup()
 
 public void draw() 
 {
+<<<<<<< HEAD
   int[] depth = kinect.getRawDepth();
   
   if (startScreenDone == false) {
@@ -76,6 +77,115 @@ public void draw()
   } 
   particleSystem.addParticle(new PVector(random(width), random(height)));
   frameRate(30);
+=======
+  // if (startScreenDone == false) {
+
+  //   system.update();
+  //   if(millis() > ellapsedTime + 2000) {
+  //     system.clearCount();
+  //     background(0);
+  //     ready = true;
+  //   }
+  //   // Update our particle system each frame
+  //   //   image(kinect.getVideoImage(), 640, 0);
+  //   int[] depth = kinect.getRawDepth();
+  //   if(initialStart == true) {
+  //     initialStart = false;
+  //     delay(2000);
+  //   }
+  //   for (int x = 0; x < kinect.width; x++) {
+  //     for (int y = 0; y < kinect.height; y++) {
+  //       int offset = x + y * kinect.width;
+  //       int d = depth[offset];
+  //       if (d > minThresh && d < maxThresh) {
+  //         ellapsedTime = millis();
+  //         if(ready == true) {
+  //           ready = false;
+  //           for(int i = 0; i < 24; i++) {
+  //             system.addParticle(new PVector(random(x-50, x+50), random(y-50, y+50)));
+  //           }
+  //         }
+  //       } else {
+  //         if(millis() > ellapsedTime + 100) {
+  //           ready = true;
+  //         }
+  //       }
+  //     }
+  //   }
+  // } else {
+
+    /***********Sitan's part************/
+    background(0);
+
+	  particleSystem.run();
+	
+    float sumX = 0;
+    float sumY = 0;
+    float sumZ = 0;
+    float totalPixels = 0;
+    float avgX = 0;
+    float avgY = 0;
+    float avgZ = 0;
+    
+
+    int[] depth = kinect.getRawDepth();
+
+    for(int x = 0; x < kinect.width; x++){
+      for(int y = 0; y < kinect.height; y++){
+        
+        int offset = x + y * kinect.width;
+        int depthValue = depth[offset];
+        int minTrash = 500;
+        int maxTrash = 745;
+
+        if(depthValue > minTrash && depthValue < maxTrash){
+          sumX += x;
+          sumY += y;
+          sumZ += depthValue;
+          totalPixels ++;
+        }
+      //}
+    }
+
+    // avgX = sumX / totalPixels;
+    // avgY = sumY / totalPixels;
+    // avgZ = Math.round(sumZ / (totalPixels * 10));
+    // //println("depth: " + avgZ);
+    // PVector avgPosition = new PVector(avgX, avgY);
+    // //println("avgZ before: " + avgZ);
+    // if(avgZ > 65 && avgZ <= 72){
+    // 	//println(avgZ);
+    // 	particleSystem.getAttracted(avgPosition);
+    // }else if(avgZ > 72 && avgZ < 75){
+    // 	particleSystem.getRepulsed(avgPosition);
+    // }
+  }
+}
+
+// void mousePressed()
+// {
+  
+//   // print("Here");
+//   background(0);
+//   if (millis() > ellapsedTime + SPAWN_DELAY) {
+//     for(int i = 0; i < 24; i++) {
+//       background(0, 0.1);
+//       system.addParticle(new PVector(x1[i], y1[i]));
+//       ellapsedTime = millis();
+//     }
+//   }
+// }
+
+/************Sitan's part *****************/
+public void mouseDragged(){
+	PVector mouse = new PVector(mouseX, mouseY);
+	particleSystem.getAttracted(mouse);
+}
+
+public void mousePressed(){
+	PVector mouse = new PVector(mouseX,mouseY);
+	particleSystem.getRepulsed(mouse);
+>>>>>>> Sitan | changes main and Particle2 and ParticleSystem2 to current working stage
 }
 class Attractor{
 	Particle2 particle;
@@ -87,7 +197,7 @@ class Attractor{
 
 	Attractor(PVector position){
 		location = position.get();
-		mass = 20; // later one try with depthvalue
+		mass = random(20); // later one try with depthvalue
 		g = 5;
 	}
 
@@ -95,24 +205,29 @@ class Attractor{
 		PVector force = PVector.sub(location, particle.position);
 		distance = force.mag();
 		force.normalize();
-		//strength = (g * mass * particle.mass) * (distance * distance);
 		strength = g / distance * distance;
-		force.mult(strength);
-		ColourGenerator colour = new ColourGenerator();
-    colour.update();
-		return force;
-	}
-
-	public PVector repulse(Particle2 particle){
-		PVector force = PVector.sub(location, particle.position);
-		distance = force.mag();
-		force.normalize();
-		strength = -1 * g / distance* distance;//
-		//strength = (g * mass * particle.mass) * (distance * distance); 
 		force.mult(strength);
     colour.update();
 		
 		return force;
+	}
+
+	public PVector repulse(Particle2 particle){
+		PVector force;
+		float particleDistance = dist(location.x, location.y, particle.position.x, particle.position.y);
+		if(particleDistance < 200){
+			force = PVector.sub(location, particle.position);
+			distance = force.mag();
+			force.normalize();
+			strength = -1 * g * distance * distance;
+			force.mult(strength);
+			colour.update();
+			
+		}else{
+			force = new PVector(0,0);
+		}
+		return force;
+		
 	}
 }
 class ColourGenerator
@@ -247,7 +362,7 @@ class Particle2{
     acceleration = new PVector(random(-1,1), random(-1,1));
     lifespan = 255;
   }
-    
+  
   public void applyForce(PVector f){
     PVector force = PVector.div(f, mass);
     acceleration.add(force);
@@ -270,13 +385,12 @@ class Particle2{
   }
 
   public void move(){
-    //println("partPosition: " + position);
     velocity.add(acceleration);
     velocity.limit(3);
     position.add(velocity);
 
     acceleration.mult(0);
-    //lifespan -= 0.005;
+    //lifespan -= 0.00005;
   }
 
   public void checkEdges(){
@@ -313,12 +427,6 @@ class Particle2{
     }
     return false;
   }
-
-  // void changeColor(){
-  // //fillColor = color(random(255), random(255), random(255));
-  // fillColor = color(0,160, random(255));
-  // }
-
 
   public void run(){
     checkEdges();
@@ -403,16 +511,6 @@ class ParticleSystem2{
       part.run();
     }
   }
-
-  // void showParticle(){
-  //   for(int i = particleList.size() - 1; i >= 0; i--){
-  //     Particle part = particleList.get(i);
-  //     part.run();
-  //     if(part.isDead()){
-  //       particleList.remove(part);
-  //     }
-  //   }
-  // }
 
   public void repulseParticle(){
     for(int i = 0; i < particleList.size(); i++){

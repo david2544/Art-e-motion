@@ -31,16 +31,6 @@ class ParticleSystem2{
     }
   }
 
-  // void showParticle(){
-  //   for(int i = particleList.size() - 1; i >= 0; i--){
-  //     Particle part = particleList.get(i);
-  //     part.run();
-  //     if(part.isDead()){
-  //       particleList.remove(part);
-  //     }
-  //   }
-  // }
-
   void repulseParticle(){
     for(int i = 0; i < particleList.size(); i++){
       for(int j = 0; j< particleList.size(); j++){
