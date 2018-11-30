@@ -4,21 +4,12 @@ import java.util.*;
 class ParticleSystem2{
   Particle2 particle;
   ArrayList<Particle2> particleList = new ArrayList<Particle2>();
-  Iterator<Particle2> itr = particleList.iterator();
   Attractor hand;
   PVector position;
   PVector force;
-	PVector handPosition;
-  float time = 0;
-
-  int index;
   int particleNumber = 500;
   
-  ParticleSystem2(){
-  }
-
-  void addParticle(PVector location){
-    position = location.get();
+  void addParticle(){
     for(int i = 0 ; i < particleNumber; i++){
       particle = new Particle2();
       particleList.add(particle);

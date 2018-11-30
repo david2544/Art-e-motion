@@ -24,8 +24,8 @@ public class main extends PApplet {
 
 Kinect kinect;
 
-//float minThresh = 600;
-//float maxThresh = 725;
+float minThresh = 600;
+float maxThresh = 725;
 boolean initialStart = true;
 
 final int PARTICLE_START_FORCE = 100;
@@ -41,12 +41,11 @@ final int SPAWN_DELAY = 50; //ms
 boolean displayColour = true;
 int ellapsedTime = millis();
 boolean ready = true;
-boolean startScreenDone = false;
+boolean startScreenDone = true;
 
 ParticleSystem system = new ParticleSystem();
 ColourGenerator colour = new ColourGenerator();
 ParticleSystem2 particleSystem = new ParticleSystem2();
-// Sound sound;
 Attractor hand;
 float time = 0;
 float sumX = 0;
@@ -63,6 +62,8 @@ public void setup()
   kinect.enableMirror(true);
   background(0);
   frameRate(30);
+  particleSystem.addParticle();
+  
 }
 
 public void draw() 
@@ -74,8 +75,6 @@ public void draw()
   } else {
     secondScreen(depth);
   } 
-  particleSystem.addParticle(new PVector(random(width), random(height)));
-  frameRate(30);
 }
 class Attractor{
 	Particle2 particle;
@@ -362,17 +361,11 @@ class ParticleSystem2{
   Attractor hand;
   PVector position;
   PVector force;
-	PVector handPosition;
-  float time = 0;
 
-  int index;
   int particleNumber = 500;
   
-  ParticleSystem2(){
-  }
 
-  public void addParticle(PVector location){
-    position = location.get();
+  public void addParticle(){
     for(int i = 0 ; i < particleNumber; i++){
       particle = new Particle2();
       particleList.add(particle);
@@ -435,7 +428,6 @@ public void firstScreen(int[] depth) {
 
 public void secondScreen(int[] depth) {
   background(0);
-  particleSystem.addParticle(new PVector(random(width), random(height)));
   particleSystem.run();
 
   float avgX = 0;
@@ -449,15 +441,11 @@ public void secondScreen(int[] depth) {
 
   avgX = sumX / totalPixels;
   avgY = sumY / totalPixels;
-	avgZ = Math.round(sumZ / (totalPixels * 10));
-
   PVector avgPosition = new PVector(avgX, avgY);
 
-	if(avgZ > 65 && avgZ <= 72){
-		particleSystem.getAttracted(avgPosition);
-	}else if(avgZ > 72 && avgZ < 75){
-		particleSystem.getRepulsed(avgPosition);
-	}
+  if(avgPosition.x > 0 && avgPosition.y > 0){
+    particleSystem.getAttracted(avgPosition);
+  }
 }
 
 public void pixelParser(int[] depth) {

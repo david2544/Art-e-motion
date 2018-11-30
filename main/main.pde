@@ -4,8 +4,8 @@ import org.openkinect.processing.*;
 
 Kinect kinect;
 
-//float minThresh = 600;
-//float maxThresh = 725;
+float minThresh = 600;
+float maxThresh = 725;
 boolean initialStart = true;
 
 final int PARTICLE_START_FORCE = 100;
@@ -21,7 +21,7 @@ final int SPAWN_DELAY = 50; //ms
 boolean displayColour = true;
 int ellapsedTime = millis();
 boolean ready = true;
-boolean startScreenDone = false;
+boolean startScreenDone = true;
 
 ParticleSystem system = new ParticleSystem();
 ColourGenerator colour = new ColourGenerator();
@@ -42,6 +42,8 @@ void setup()
   kinect.enableMirror(true);
   background(0);
   frameRate(30);
+  particleSystem.addParticle();
+  
 }
 
 void draw() 
@@ -53,6 +55,4 @@ void draw()
   } else {
     secondScreen(depth);
   } 
-  particleSystem.addParticle(new PVector(random(width), random(height)));
-  frameRate(30);
 }
