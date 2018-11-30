@@ -3,7 +3,7 @@ import org.openkinect.processing.*;
 import themidibus.*;
 
 Kinect kinect;
-MidiBus startBus = new MidiBus(this, "startBus", "startBus");
+// MidiBus startBus = new MidiBus(this, "startBus", "startBus");
 
 
 final int PARTICLE_START_FORCE = 100;
@@ -44,8 +44,8 @@ void setup()
   frameRate(30);
   particleSystem.addParticle();
 
-  //startBus.sendControllerChange(1,122,120); // starts the first clip(baseLine)
-  startBus.sendControllerChange(1,7,127);
+  // startBus.sendControllerChange(1,122,120); // starts the first clip(baseLine)
+  // startBus.sendControllerChange(1,7,127);
 
 }
 
@@ -58,17 +58,4 @@ void draw()
   } else {
     secondScreen(depth);
   } 
-}
-
-
-void mouseDragged(){
-	PVector mouse = new PVector(mouseX, mouseY);
-	particleSystem.getAttracted(mouse);
-}
-
-void keyPressed(){
-	if(key == 'A' || key =='a'){
-		startBus.sendControllerChange(1,7,0);
-		exit();
-	}
 }

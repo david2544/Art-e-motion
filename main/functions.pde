@@ -69,3 +69,15 @@ void addParticlesFirstScreen(int d, int x, int y) {
     }
   }
 }
+
+void mouseDragged(){
+	PVector mouse = new PVector(mouseX, mouseY);
+	particleSystem.getAttracted(mouse);
+}
+
+void keyPressed(){
+	if(key == 'A' || key =='a'){
+		// startBus.sendControllerChange(1,7,0);
+		exit();
+	}
+}
