@@ -21,17 +21,18 @@ final int SPAWN_DELAY = 50; //ms
 boolean displayColour = true;
 int ellapsedTime = millis();
 boolean ready = true;
-boolean startScreenDone = false;
+boolean startScreenDone = true;
 
 ParticleSystem system = new ParticleSystem();
 ColourGenerator colour = new ColourGenerator();
 ParticleSystem2 particleSystem = new ParticleSystem2();
-// Sound sound;
 Attractor hand;
 float time = 0;
 float sumX = 0;
 float sumY = 0;
 float totalPixels = 0;
+float sumZ = 0;
+float avgZ = 0;
 
 void setup()
 {
@@ -41,6 +42,8 @@ void setup()
   kinect.enableMirror(true);
   background(0);
   frameRate(30);
+  particleSystem.addParticle();
+  
 }
 
 void draw() 

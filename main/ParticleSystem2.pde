@@ -4,47 +4,21 @@ import java.util.*;
 class ParticleSystem2{
   Particle2 particle;
   ArrayList<Particle2> particleList = new ArrayList<Particle2>();
-  Iterator<Particle2> itr = particleList.iterator();
   Attractor hand;
   PVector position;
   PVector force;
-	PVector handPosition;
-  float time = 0;
-
-  int index;
-  int particleNumber = 1000;
+  int particleNumber = 500;
   
-  ParticleSystem2(){
-  }
-
-  void addParticle(PVector location){
-    position = location.get();
+  void addParticle(){
     for(int i = 0 ; i < particleNumber; i++){
       particle = new Particle2();
-      if(millis() > time + 10){
-        particleList.add(particle);
-        time = millis();
-      }
-      // particleList.add(index, particle);
-      // particle.setIndex(index);
-      // index = i;
+      particleList.add(particle);
     }
   }
 
-  // void addParticle(PVector location){
-  //   position = location.get();
-  //   if(particleList.size() < 500){
-  //     particleList.add(new Particle());
-  //   }
-  // }
-
   void showParticle(){
-    for(int i = particleList.size() -1; i >= 0; i--){
-      Particle2 part = particleList.get(i);
+    for(Particle2 part : particleList){
       part.run();
-      if(part.isDead()){
-        particleList.remove(part);
-      }
     }
   }
 
@@ -66,24 +40,12 @@ class ParticleSystem2{
   }
 
 	void getAttracted(PVector location){
-    handPosition = location.get();
-		hand = new Attractor(handPosition);
+    hand = new Attractor(location);
 
 		for(Particle2 part : particleList){
 			force = hand.attract(part);
 			part.applyForce(force);
 		}
-	}
-
-	void getRepulsed(PVector handpos){
-		handPosition = handpos.get();
-		hand = new Attractor(handPosition);
-
-		for(Particle2 part : particleList){
-			force = hand.repulse(part);
-			part.applyForce(force);
-		}
-
 	}
 
   void run(){
