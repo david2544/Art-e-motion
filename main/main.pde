@@ -1,8 +1,10 @@
 import java.util.Iterator;
 import org.openkinect.processing.*;
-// import processing.sound.*;
+import themidibus.*;
 
 Kinect kinect;
+MidiBus startBus = new MidiBus(this, "startBus", "startBus");
+
 
 final int PARTICLE_START_FORCE = 100;
 final int PARTILE_MAX_VEL = 20; ///7;//4;
@@ -41,6 +43,10 @@ void setup()
   background(0);
   frameRate(30);
   particleSystem.addParticle();
+
+  //startBus.sendControllerChange(1,122,120); // starts the first clip(baseLine)
+  startBus.sendControllerChange(1,7,127);
+
 }
 
 void draw() 
@@ -52,4 +58,17 @@ void draw()
   } else {
     secondScreen(depth);
   } 
+}
+
+
+void mouseDragged(){
+	PVector mouse = new PVector(mouseX, mouseY);
+	particleSystem.getAttracted(mouse);
+}
+
+void keyPressed(){
+	if(key == 'A' || key =='a'){
+		startBus.sendControllerChange(1,7,0);
+		exit();
+	}
 }
