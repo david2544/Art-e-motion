@@ -43,13 +43,12 @@ void pixelParser(int[] depth) {
       int offset = x + y * kinect.width;
       int d = depth[offset];
 
-      if(d > minThresh && d < maxThresh) {
+      if(d > MIN_THRESH && d < MAX_THRESH) {
         if (startScreenDone == false) {
           addParticlesFirstScreen(d, x, y);
         } else {
           sumX += x;
           sumY += y;
-          sumZ += d;
           totalPixels ++;
         }
       } else {
