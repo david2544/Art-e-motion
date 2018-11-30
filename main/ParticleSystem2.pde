@@ -57,17 +57,6 @@ class ParticleSystem2{
 		}
 	}
 
-	void getRepulsed(PVector handPos){
-		hand = new Attractor(handPos);
-
-		for(Particle2 part : particleList){
-			force = hand.repulse(part);
-      //force = force.add(force);
-			part.applyForce(force);
-		}
-
-	}
-
   void run(){
     repulseParticle();
     showParticle();

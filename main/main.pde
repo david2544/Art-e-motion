@@ -4,8 +4,8 @@ import org.openkinect.processing.*;
 
 Kinect kinect;
 
-float minThresh = 600;
-float maxThresh = 725;
+//float minThresh = 600;
+//float maxThresh = 725;
 boolean initialStart = true;
 
 final int PARTICLE_START_FORCE = 100;
@@ -26,7 +26,6 @@ boolean startScreenDone = false;
 ParticleSystem system = new ParticleSystem();
 ColourGenerator colour = new ColourGenerator();
 ParticleSystem2 particleSystem = new ParticleSystem2();
-// Sound sound;
 Attractor hand;
 float time = 0;
 float sumX = 0;
