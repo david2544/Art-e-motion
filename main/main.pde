@@ -111,7 +111,6 @@ void pixelParser(int[] depth) {
           totalPixels ++;
         }
       } else {
-        // print(millis(), ellapsedTime, "\n");
         if(millis() > ellapsedTime + 100) {
           ready = true;
         }
