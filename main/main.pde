@@ -23,7 +23,6 @@ float sumY = 0;
 float totalPixels = 0;
 PVector lastAvgPos = new PVector(0, 0);
 
-boolean initialStart = true;
 boolean isPushing = false;
 boolean shouldRenderAnimation1 = false;
 
