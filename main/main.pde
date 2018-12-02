@@ -4,7 +4,6 @@ import org.openkinect.processing.*;
 
 Kinect kinect;
 
-final int PARTICLE_START_FORCE = 100;
 final int PARTILE_MAX_VEL = 20; ///7;//4;
 final int PARTICLE_MAX_ACC = 10; // Max particle acceleration
 final int SPAWN_COUNT = 2; // Number of particles to spawn at once
@@ -23,8 +22,8 @@ float sumY = 0;
 float totalPixels = 0;
 
 boolean initialStart = true;
-boolean ready = true;
-boolean startScreenDone = false;
+boolean isPushing = false;
+boolean animation1Done = false;
 
 Attractor hand;
 
@@ -32,8 +31,7 @@ ParticleSystem system = new ParticleSystem();
 ColourGenerator colour = new ColourGenerator();
 ParticleSystem2 particleSystem = new ParticleSystem2();
 
-void setup()
-{
+void setup() {
   size(640, 480);
   kinect = new Kinect(this);
   kinect.initDepth();
@@ -43,13 +41,12 @@ void setup()
   particleSystem.addParticle();
 }
 
-void draw() 
-{
+void draw() {
   int[] depth = kinect.getRawDepth();
   
-  if (startScreenDone == false) {
-    firstScreen(depth);
+  if (animation1Done == false) {
+    renderAnimation1(depth);
   } else {
-    secondScreen(depth);
+    renderAnimation2(depth);
   } 
 }
