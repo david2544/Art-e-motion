@@ -16,15 +16,17 @@ final float SHRINK_RATE = 1;//2;//5;
 final float MIN_THRESH = 600;
 final float MAX_THRESH = 725;
 
+int animation2Iterations = 20;
 int ellapsedTime = millis();
 
 float sumX = 0;
 float sumY = 0;
 float totalPixels = 0;
+PVector lastAvgPos = new PVector(0, 0);
 
 boolean initialStart = true;
-boolean ready = true;
-boolean startScreenDone = false;
+boolean isPushing = false;
+boolean shouldRenderAnimation1 = false;
 
 Attractor hand;
 
@@ -47,8 +49,8 @@ void draw()
 {
   int[] depth = kinect.getRawDepth();
   
-  if (startScreenDone == false) {
-    firstScreen(depth);
+  if (shouldRenderAnimation1 == true) {
+    renderAnimation1(depth);
   } else {
     secondScreen(depth);
   } 

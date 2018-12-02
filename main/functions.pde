@@ -1,18 +1,8 @@
-void firstScreen(int[] depth) {
+void renderAnimation1(int[] depth) {
+  // Update the particle system with each iteration
+  drawBackground();
   system.update();
-  if(millis() > ellapsedTime + 2000) {
-    system.clearCount();
-    background(0);
-    ready = true;
-  }
-
-  // Update the particle system each frame
-  if(initialStart == true) {
-    initialStart = false;
-    delay(2000);
-  }
-
-  pixelParser(depth);
+  pixelIterator(depth);
 }
 
 void secondScreen(int[] depth) {
@@ -31,6 +21,17 @@ void secondScreen(int[] depth) {
   avgX = sumX / totalPixels;
   avgY = sumY / totalPixels;
   PVector avgPosition = new PVector(avgX, avgY);
+  if(animation2Iterations == 20) {
+    if (lastAvgPos.x < avgPosition.x + 20 && lastAvgPos.x > avgPosition.x - 20 && lastAvgPos.y < avgPosition.y + 20 && lastAvgPos.y > avgPosition.y - 20) {
+      shouldRenderAnimation1 = true;
+      system.particles.clear();
+    }
+
+    lastAvgPos = avgPosition;
+    animation2Iterations = 0;
+  }
+
+  animation2Iterations += 1;
 
   if(avgPosition.x > 0 && avgPosition.y > 0){
     particleSystem.getAttracted(avgPosition);
@@ -44,8 +45,8 @@ void pixelParser(int[] depth) {
       int d = depth[offset];
 
       if(d > MIN_THRESH && d < MAX_THRESH) {
-        if (startScreenDone == false) {
-          addParticlesFirstScreen(d, x, y);
+        if (shouldRenderAnimation1 == true) {
+          addParticlesAnimation1(d, x, y);
         } else {
           sumX += x;
           sumY += y;
@@ -53,7 +54,8 @@ void pixelParser(int[] depth) {
         }
       } else {
         if(millis() > ellapsedTime + 100) {
-          ready = true;
+          isPushing = false;
+          system.clearCount();
         }
       }
     }

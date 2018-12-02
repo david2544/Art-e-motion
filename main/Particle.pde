@@ -49,7 +49,8 @@ class Particle {
     }
 
     if(lifespan <= 0) {
-      startScreenDone = true;
+      shouldRenderAnimation1 = false;
+      animation2Iterations = 20;
     }
   }
   
