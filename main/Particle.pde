@@ -7,34 +7,35 @@ class Particle {
   float angle;
   float lifespan;
   
-  Particle(PVector loc2) {
-    loc = new PVector(loc2.x, loc2.y);
+  Particle(PVector pos) {
+    loc = new PVector(pos.x, pos.y);
     vel = new PVector(0, 0);
     acc = new PVector(0, 0);
     lifespan = 255.0;
   }
   
   void update() {
-    // Move in random direction with random speed
-    angle += random(0, TWO_PI);
-    float magnitude = random(0, PARTICLE_START_FORCE); //3
+    // Calculate the direction the particle is going to turn
+    angle = random(0, TWO_PI);
     
-    // Work out force 
-    acc.x += cos(angle) * magnitude;
-    acc.y += sin(angle) * magnitude;
+    // Cos and Sin are complementary and setting the x and y values gives us the beautiful smooth turns. 
+    acc.x += cos(angle) * 5;
+    acc.y += sin(angle) * 5;
     
-    // limit result
+    // Limit result
     acc.limit(PARTICLE_MAX_ACC);
     
-    // Add to current velocity
+    // Add acceleration to current velocity and then limit result
     vel.add(acc);
     vel.limit(PARTILE_MAX_VEL);
     
-    // Appy result to current location
+    // Appy velocity to current location
     loc.add(vel);
+
+    // Decrease the lifespan slowly over time.
     lifespan -= 2.0;
     
-    // Wrap around the screen
+    // Wrap around the screen, https://processing.org/tutorials/pvector/
     if (loc.x > width)
       loc.x -= width;
      if (loc.x < 0)
@@ -44,10 +45,12 @@ class Particle {
      if(loc.y < 0)
        loc.y += height;
     
-    if(ready == true) {
+    // If the user stopped pushing, start shrinking the particles.
+    if(isPushing == false) {
       size -= SHRINK_RATE;
     }
 
+    // If the lifespan reaches 0, we move to the enxt animation.
     if(lifespan <= 0) {
       shouldRenderAnimation1 = false;
       animation2Iterations = 20;
@@ -57,7 +60,6 @@ class Particle {
   void display() {
     colour.update();
     fill(colour.R, colour.G, colour.B, lifespan);
-    stroke(colour.R, colour.G, colour.B, lifespan);
     ellipse(loc.x, loc.y, size, size);
   }
   

@@ -5,7 +5,7 @@ void renderAnimation1(int[] depth) {
   pixelIterator(depth);
 }
 
-void secondScreen(int[] depth) {
+void renderAnimation2(int[] depth) {
   background(0);
   particleSystem.run();
 
@@ -16,7 +16,7 @@ void secondScreen(int[] depth) {
   sumY = 0;
   totalPixels = 0;
   
-  pixelParser(depth);
+  pixelIterator(depth);
 
   avgX = sumX / totalPixels;
   avgY = sumY / totalPixels;
@@ -33,17 +33,19 @@ void secondScreen(int[] depth) {
 
   animation2Iterations += 1;
 
-  if(avgPosition.x > 0 && avgPosition.y > 0){
+  if(avgPosition.x > 0 && avgPosition.y > 0) {
     particleSystem.getAttracted(avgPosition);
   }
 }
 
-void pixelParser(int[] depth) {
+void pixelIterator(int[] depth) {
   for(int x = 0; x < kinect.width; x++){
     for(int y = 0; y < kinect.height; y++){
+      // Iterates over each pixel and gets its depth value
       int offset = x + y * kinect.width;
       int d = depth[offset];
 
+      // If the depth value is between a certain threshold...
       if(d > MIN_THRESH && d < MAX_THRESH) {
         if (shouldRenderAnimation1 == true) {
           addParticlesAnimation1(d, x, y);
@@ -52,6 +54,7 @@ void pixelParser(int[] depth) {
           sumY += y;
           totalPixels ++;
         }
+      // if not, we probably ended a push so we update the variable isPushing
       } else {
         if(millis() > ellapsedTime + 100) {
           isPushing = false;
@@ -62,10 +65,18 @@ void pixelParser(int[] depth) {
   }
 }
 
-void addParticlesFirstScreen(int d, int x, int y) {
+// Gives us the fading away background
+void drawBackground() {
+  noStroke();
+  fill(0, 20);
+  rect(0, 0, width, height);
+}
+
+void addParticlesAnimation1(int d, int x, int y) {
+  // Add particles to random locations around the position where the user pushed
   ellapsedTime = millis();
-  if(ready == true) {
-    ready = false;
+  if(isPushing == false) {
+    isPushing = true;
     for(int i = 0; i < 24; i++) {
       system.addParticle(new PVector(random(x-50, x+50), random(y-50, y+50)));
     }
