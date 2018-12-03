@@ -18,4 +18,6 @@ Combining Processing animations and Kinect to create pretty art.
 - run `code .` (If you get "command not found: code" , open VsCode, run `command + shift + p` search for "code" and
   choose `Shell Command: Install 'code' command in PATH`, return to terminal and run the command again)
   Or simply open the `main` folder manually in VSCode :D
-- open the `main.pde` file and `command + shift + b`
+- open the `main.pde`.
+- if its the first time, make sure you have the "Processing Language" extension installed in VSCode and the processing IDE (https://processing.org/download/), open the processing IDE, go to `tools/install "Processing-java"` then return to VSCode and run `command + shift + p`, search for "task" and choose `Processing: Create Task File`.
+- run `command + shift + b` and enjoy!
