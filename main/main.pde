@@ -3,8 +3,8 @@ import org.openkinect.processing.*;
 import themidibus.*;
 
 Kinect kinect;
-MidiBus startBus = new MidiBus(this, "startBus", "startBus");
-MidiBus busDavid = new MidiBus(this, "busDavid", "busDavid");
+// MidiBus startBus = new MidiBus(this, "startBus", "startBus");
+// MidiBus busDavid = new MidiBus(this, "busDavid", "busDavid");
 
 
 final int PARTILE_MAX_VEL = 20; ///7;//4;
@@ -45,7 +45,7 @@ void setup() {
   particleSystem.addParticle();
 
   // startBus.sendControllerChange(1,122,120); // starts the first clip(baseLine)
-  startBus.sendControllerChange(1,7,127);
+  // startBus.sendControllerChange(1,7,127);
 
 }
 

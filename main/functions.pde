@@ -59,7 +59,7 @@ void pixelIterator(int[] depth) {
         if(millis() > ellapsedTime + 100) {
           isPushing = false;
           system.clearCount();
-          busDavid.sendControllerChange(1,123,0);
+          // busDavid.sendControllerChange(1,123,0);
         }
       }
     }
@@ -95,7 +95,7 @@ void mouseDragged(){
 
 void keyPressed(){
 	if(key == 'A' || key =='a'){
-		startBus.sendControllerChange(1,7,0);
+		//startBus.sendControllerChange(1,7,0);
 		exit();
 	}
 }

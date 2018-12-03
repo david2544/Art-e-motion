@@ -1,7 +1,7 @@
 import java.util.*;
 
 class ParticleSystem2{
-  MidiBus attractBus = new MidiBus(this, "attractBus", "attractBus");
+  // MidiBus attractBus = new MidiBus(this, "attractBus", "attractBus");
 
   Particle2 particle;
   ArrayList<Particle2> particleList = new ArrayList<Particle2>();
@@ -32,7 +32,7 @@ class ParticleSystem2{
           Particle2 p2 = particleList.get(j);
           float distance = dist(p1.position.x, p1.position.y, p2.position.x, p2.position.y);
 
-          if(distance < 10){
+          if(distance < 100){
             force = p1.repulse(p2);
             p1.applyForce(force);
           }
@@ -42,9 +42,9 @@ class ParticleSystem2{
   }
 
 	void getAttracted(PVector location){
-    int pitch = int(map(location.y, 0, height, 127,64));
-    int velocity = (int(map(location.y,0, height, 127,64)));
-    attractBus.sendNoteOn(1, pitch, velocity);
+    // int pitch = int(map(location.y, 0, height, 127,64));
+    // int velocity = (int(map(location.y,0, height, 127,64)));
+    // attractBus.sendNoteOn(1, pitch, velocity);
     
     hand = new Attractor(location);
 
