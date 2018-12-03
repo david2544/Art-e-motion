@@ -67,7 +67,7 @@ void pixelIterator(int[] depth) {
 
 // Gives us the fading away background
 void drawBackground() {
-  noStroke();
+  // noStroke();
   fill(0, 20);
   rect(0, 0, width, height);
 }
