@@ -4,6 +4,8 @@ void firstScreen(int[] depth) {
     system.clearCount();
     background(0);
     ready = true;
+    //mute all sounds when animation is done
+    busDavid.sendControllerChange(1,123,0);
   }
 
   // Update the particle system each frame
@@ -71,13 +73,17 @@ void addParticlesFirstScreen(int d, int x, int y) {
 }
 
 void mouseDragged(){
+  // addParticlesFirstScreen(int(random(100)),mouseX, mouseY);
+  // system.addParticle(new PVector(mouseX, mouseY));
+  // system.update();
+
 	PVector mouse = new PVector(mouseX, mouseY);
 	particleSystem.getAttracted(mouse);
 }
 
 void keyPressed(){
 	if(key == 'A' || key =='a'){
-		// startBus.sendControllerChange(1,7,0);
+		startBus.sendControllerChange(1,7,0);
 		exit();
 	}
 }

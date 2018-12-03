@@ -1,7 +1,7 @@
 import java.util.*;
 
 class ParticleSystem2{
-  // MidiBus attractBus = new MidiBus(this, "attractBus", "attractBus");
+  MidiBus attractBus = new MidiBus(this, "attractBus", "attractBus");
 
   Particle2 particle;
   ArrayList<Particle2> particleList = new ArrayList<Particle2>();
@@ -44,7 +44,7 @@ class ParticleSystem2{
 	void getAttracted(PVector location){
     int pitch = int(map(location.y, 0, height, 127,64));
     int velocity = (int(map(location.y,0, height, 127,64)));
-    // attractBus.sendNoteOn(1, pitch, velocity);
+    attractBus.sendNoteOn(1, pitch, velocity);
     
     hand = new Attractor(location);
 

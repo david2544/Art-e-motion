@@ -3,7 +3,8 @@ import org.openkinect.processing.*;
 import themidibus.*;
 
 Kinect kinect;
-// MidiBus startBus = new MidiBus(this, "startBus", "startBus");
+MidiBus startBus = new MidiBus(this, "startBus", "startBus");
+MidiBus busDavid = new MidiBus(this, "busDavid", "busDavid");
 
 
 final int PARTICLE_START_FORCE = 100;
@@ -26,7 +27,7 @@ float totalPixels = 0;
 
 boolean initialStart = true;
 boolean ready = true;
-boolean startScreenDone = false;
+boolean startScreenDone = true;
 
 Attractor hand;
 
@@ -45,7 +46,7 @@ void setup()
   particleSystem.addParticle();
 
   // startBus.sendControllerChange(1,122,120); // starts the first clip(baseLine)
-  // startBus.sendControllerChange(1,7,127);
+  startBus.sendControllerChange(1,7,127);
 
 }
 
