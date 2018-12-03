@@ -53,7 +53,7 @@ class Particle {
     // If the lifespan reaches 0, we move to the enxt animation.
     if(lifespan <= 0) {
       shouldRenderAnimation1 = false;
-      animation2Iterations = 20;
+      animation2Iterations = 40;
     }
   }
   

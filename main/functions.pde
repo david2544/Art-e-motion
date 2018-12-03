@@ -21,7 +21,7 @@ void renderAnimation2(int[] depth) {
   avgX = sumX / totalPixels;
   avgY = sumY / totalPixels;
   PVector avgPosition = new PVector(avgX, avgY);
-  if(animation2Iterations == 20) {
+  if(animation2Iterations == 40) {
     if (lastAvgPos.x < avgPosition.x + 20 && lastAvgPos.x > avgPosition.x - 20 && lastAvgPos.y < avgPosition.y + 20 && lastAvgPos.y > avgPosition.y - 20) {
       shouldRenderAnimation1 = true;
       system.particles.clear();

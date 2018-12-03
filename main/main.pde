@@ -13,9 +13,9 @@ final int SPAWN_DELAY = 50; //ms
 final float LIFESPAN_DECREMENT = 2.0;
 final float SHRINK_RATE = 1;//2;//5;
 final float MIN_THRESH = 600;
-final float MAX_THRESH = 725;
+final float MAX_THRESH = 760;
 
-int animation2Iterations = 20;
+int animation2Iterations = 40;
 int ellapsedTime = millis();
 
 float sumX = 0;
@@ -36,7 +36,7 @@ void setup() {
   size(640, 480);
   kinect = new Kinect(this);
   kinect.initDepth();
-  kinect.enableMirror(true);
+  // kinect.enableMirror(true);
   background(0);
   frameRate(30);
   particleSystem.addParticle();
