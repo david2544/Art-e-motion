@@ -23,7 +23,7 @@ class Particle2{
     float distance = force.mag();
 
     force.normalize();
-    float strength = (g * mass * part.mass) / (distance * distance);
+    float strength = (g * mass * part.mass) / distance;
     force.mult(strength);
     return force;
   }

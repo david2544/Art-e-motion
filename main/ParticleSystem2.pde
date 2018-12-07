@@ -32,7 +32,7 @@ class ParticleSystem2{
           Particle2 p2 = particleList.get(j);
           float distance = dist(p1.position.x, p1.position.y, p2.position.x, p2.position.y);
 
-          if(distance < 100){
+          if(distance < 10){
             force = p1.repulse(p2);
             p1.applyForce(force);
           }

@@ -8,7 +8,7 @@ class Attractor{
 
 	Attractor(PVector position){
 		location = position.get();
-		mass = random(20); // later one try with depthvalue
+		mass = random(20); 
 		g = 5;
 	}
 
