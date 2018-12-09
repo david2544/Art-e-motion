@@ -21,3 +21,6 @@ Combining Processing animations and Kinect to create pretty art.
 - open the `main.pde`.
 - if its the first time, make sure you have the "Processing Language" extension installed in VSCode and the processing IDE (https://processing.org/download/), open the processing IDE, go to `tools/install "Processing-java"` then return to VSCode and run `command + shift + p`, search for "task" and choose `Processing: Create Task File`.
 - run `command + shift + b` and enjoy!
+
+
+Credits to Killeroo for the ColorGenenrator class (https://www.openprocessing.org/sketch/504589)
