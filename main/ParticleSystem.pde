@@ -25,7 +25,12 @@ class ParticleSystem {
       // Get next particle
       Particle p = i.next();
       
-      // update position, size and lifespan
+      //sending notes depending on particle position to ableton
+      // int note = int(map(p.loc.x, 0, width, 0,127));
+      // int velocity = int(map(p.loc.y, 0, height, 127, 0));
+      // busDavid.sendNoteOn(1, note, velocity);
+      
+      // update position and lifespan
       p.update();
       // Remove particle if dead
       if (p.isDead()) {

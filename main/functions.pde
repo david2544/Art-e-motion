@@ -59,6 +59,7 @@ void pixelIterator(int[] depth) {
         if(millis() > ellapsedTime + 100) {
           isPushing = false;
           system.clearCount();
+          // busDavid.sendControllerChange(1,123,0);
         }
       }
     }
@@ -81,4 +82,20 @@ void addParticlesAnimation1(int d, int x, int y) {
       system.addParticle(new PVector(random(x-50, x+50), random(y-50, y+50)));
     }
   }
+}
+
+void mouseDragged(){
+  // addParticlesFirstScreen(int(random(100)),mouseX, mouseY);
+  // system.addParticle(new PVector(mouseX, mouseY));
+  // system.update();
+
+	PVector mouse = new PVector(mouseX, mouseY);
+	particleSystem.getAttracted(mouse);
+}
+
+void keyPressed(){
+	if(key == 'A' || key =='a'){
+		//startBus.sendControllerChange(1,7,0);
+		exit();
+	}
 }

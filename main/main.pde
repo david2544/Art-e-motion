@@ -1,8 +1,11 @@
 import java.util.Iterator;
 import org.openkinect.processing.*;
-// import processing.sound.*;
+import themidibus.*;
 
 Kinect kinect;
+// MidiBus startBus = new MidiBus(this, "startBus", "startBus");
+// MidiBus busDavid = new MidiBus(this, "busDavid", "busDavid");
+
 
 final int PARTILE_MAX_VEL = 20; ///7;//4;
 final int PARTICLE_MAX_ACC = 10; // Max particle acceleration
@@ -40,6 +43,10 @@ void setup() {
   background(0);
   frameRate(30);
   particleSystem.addParticle();
+
+  // startBus.sendControllerChange(1,122,120); // starts the first clip(baseLine)
+  // startBus.sendControllerChange(1,7,127);
+
 }
 
 void draw() {
