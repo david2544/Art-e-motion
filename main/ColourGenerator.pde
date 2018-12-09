@@ -1,3 +1,4 @@
+// Killeroo (2018), Processing (Version 3) https://www.openprocessing.org/sketch/504589
 class ColourGenerator {
   final static float MIN_SPEED = 0.2;
   final static float MAX_SPEED = 0.7;
