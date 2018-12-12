@@ -24,3 +24,4 @@ Combining Processing animations and Kinect to create pretty art.
 
 
 Credits to Killeroo for the ColorGenenrator class (https://www.openprocessing.org/sketch/504589)
+Source for the Git hook to prevent pushes to master: https://blog.ghost.org/prevent-master-push/
